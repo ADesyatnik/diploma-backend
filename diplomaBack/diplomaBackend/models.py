@@ -41,7 +41,7 @@ class Buyer(models.Model):
         verbose_name_plural = ("Покупатели")
 
     def __str__(self):
-        return f'{self.person}'
+        return f'{self.person} {self.active}'
 
 class Role(models.Model):
 
@@ -53,7 +53,7 @@ class Role(models.Model):
         verbose_name_plural = ("Роли")
 
     def __str__(self):
-        return self.name
+        return f'{self.name}'
 
 class Employee(models.Model):
 
@@ -77,7 +77,7 @@ class CompanyType(models.Model):
         verbose_name_plural = ("Типы компаний")
 
     def __str__(self):
-        return self.name
+        return f'{self.name}'
 
 class Revenue(models.Model):
 
@@ -90,11 +90,12 @@ class Revenue(models.Model):
         verbose_name_plural = ("Доходы")
 
     def __str__(self):
-        return self.current
+        return f'{self.current}'
 
 class Status(models.Model):
 
-    stage_number = models.IntegerField(("Номер этапа"))
+    stage_number = models.DecimalField(("Номер этапа"), max_digits=5, decimal_places=2)
+    name = models.CharField(("Название"), max_length=50)
     description = models.TextField(("Описание"), blank=True, null=True)
 
     class Meta:
@@ -102,19 +103,19 @@ class Status(models.Model):
         verbose_name_plural = ("Статусы")
 
     def __str__(self):
-        return self.stage_number
+        return f'{self.stage_number} - {self.name}'
         
 class CompanyStatus(models.Model):
 
-    current_status = models.ForeignKey(Status, verbose_name=("Текущий статус сделки"), related_name="current_companies_statuses", on_delete=models.CASCADE)
-    high_status = models.ForeignKey(Status, verbose_name=("Наивысший статус сделки"), related_name="high_companies_statuses", on_delete=models.CASCADE)
+    current_status = models.ForeignKey(Status, verbose_name=("Текущий статус сделки"), related_name="current_companies_statuses", on_delete=models.CASCADE, blank=True)
+    high_status = models.ForeignKey(Status, verbose_name=("Наивысший статус сделки"), related_name="high_companies_statuses", on_delete=models.CASCADE, blank=True)
 
     class Meta:
         verbose_name = ("Статус сделки")
         verbose_name_plural = ("Статусы сделок")
 
     def __str__(self):
-        return f'{self.current_status} {self.high_status}'
+        return f'{self.current_status}; {self.high_status}'
 
 class ActionType(models.Model):
 
@@ -126,19 +127,7 @@ class ActionType(models.Model):
         verbose_name_plural = ("Типы действий")
 
     def __str__(self):
-        return self.name
-        
-class Action(models.Model):
-
-    action_type = models.ForeignKey("ActionType", verbose_name=("Тип действия"), related_name="actions", on_delete=models.CASCADE)
-    date = models.DateField(("Дата"), auto_now=False, auto_now_add=True)
-
-    class Meta:
-        verbose_name = ("Действие")
-        verbose_name_plural = ("Действия")
-
-    def __str__(self):
-        return f'{self.action_type}'
+        return f'{self.name}'
 
 class BusinessModel(models.Model):
 
@@ -150,7 +139,7 @@ class BusinessModel(models.Model):
         verbose_name_plural = ("Бизнес модели")
 
     def __str__(self):
-        return self.name
+        return f'{self.name}'
 
 class IndustryCategory(models.Model):
 
@@ -162,20 +151,7 @@ class IndustryCategory(models.Model):
         verbose_name_plural = ("Категории промышленности")
 
     def __str__(self):
-        return self.name
-
-class Research(models.Model):
-
-    research_date = models.DateField(("Дата"), auto_now=False, auto_now_add=True)
-    researcher = models.OneToOneField(Employee, verbose_name=("Работник"), related_name="researches", on_delete=models.SET_NULL, null=True)
-    reasearch_note = models.TextField(("Заметка"), blank=True, null=True)
-
-    class Meta:
-        verbose_name = ("Исследование")
-        verbose_name_plural = ("Исследования")
-
-    def __str__(self):
-        return f'{self.research_date} {self.researcher}'
+        return f'{self.name}'
 
 class Company(models.Model):
 
@@ -191,29 +167,62 @@ class Company(models.Model):
     parent = models.ForeignKey('self', verbose_name=("Родительская компания"), related_name="companies", on_delete=models.SET_NULL, blank=True, null=True)
     employees_number = models.IntegerField(("Количество сотрудников"), blank=True, null=True)
     description = models.TextField(("Описание"), blank=True, null=True)
-    research = models.ForeignKey(Research, verbose_name=("Исследования"), related_name="companies", on_delete=models.CASCADE, blank=True, null=True)
     revenue = models.OneToOneField(Revenue, verbose_name=("Доход"), related_name="companies", on_delete=models.PROTECT, blank=True, null=True)
     stock_value = models.DecimalField(("Стоимость акций"), max_digits=10, decimal_places=2)
     owner = models.ForeignKey(Contact, verbose_name=("Владелец"), related_name="owned_companies", on_delete=models.PROTECT, blank=True, null=True)
     company_status = models.ForeignKey(CompanyStatus, verbose_name=("Статус сделки"), related_name="companies", on_delete=models.PROTECT, blank=True, null=True)
     logo = models.CharField(("Логотип"), max_length=200)
-    #photos: [str]
     web = models.CharField(("Web-сайт"), max_length = 200, blank=True, null=True)
-    #next_action_id: int
-    #last_action_id: int
-    #actions_id: [int]
     business_models = models.ManyToManyField(BusinessModel, verbose_name=("Бизнес модели"))
     industry_categories = models.ManyToManyField(IndustryCategory, verbose_name=("Категории промышленности"))
     buyers = models.ManyToManyField(Buyer, verbose_name=("Потенциальные покупатели"), related_name="buyer_companies", blank=True)
     active_buyer = models.ForeignKey(Buyer, verbose_name=("Активный покупатель"), related_name="active_buyer_companies", on_delete=models.SET_NULL, blank=True, null=True)
     foundation_date = models.DateField(("Дата основания компании"), auto_now=False, auto_now_add=False)
 
-
     class Meta:
         verbose_name = ("Компания")
         verbose_name_plural = ("Компании")
 
     def __str__(self):
-        return self.legal_name
+        return f'{self.legal_name}'
+
+class Research(models.Model):
+
+    research_date = models.DateField(("Дата"), auto_now=False, auto_now_add=True)
+    researcher = models.ForeignKey(Employee, verbose_name=("Работник"), related_name="researches", on_delete=models.SET_NULL, null=True)
+    reasearch_note = models.TextField(("Заметка"), blank=True, null=True)
+    company = models.ForeignKey(Company, verbose_name=("Компания"), related_name="company_researches", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = ("Исследование")
+        verbose_name_plural = ("Исследования")
+
+    def __str__(self):
+        return f'{self.research_date} {self.researcher}'
+
+class Photo(models.Model):
+
+    company = models.ForeignKey(Company, verbose_name=("Компания"), related_name="photo", on_delete=models.CASCADE)
+    image = models.CharField(("Изображение"), max_length=250)
+    
+    class Meta:
+        verbose_name = ("Фотография")
+        verbose_name_plural = ("Фотографии")
+
+    def __str__(self):
+        return f'{self.company}'
+
+class Action(models.Model):
+
+    action_type = models.ForeignKey(ActionType, verbose_name=("Тип действия"), related_name="actions", on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, verbose_name=("Компания"), related_name="actions", on_delete=models.CASCADE)
+    date = models.DateField(("Дата"), auto_now=False, auto_now_add=True)
+
+    class Meta:
+        verbose_name = ("Действие")
+        verbose_name_plural = ("Действия")
+
+    def __str__(self):
+        return f'{self.action_type} {self.company}'
 
 

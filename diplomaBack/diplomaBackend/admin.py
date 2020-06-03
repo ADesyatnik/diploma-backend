@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Person, Contact, Buyer, Role, Employee, CompanyType, Revenue, Status, CompanyStatus, ActionType, Action, BusinessModel, IndustryCategory, Research, Company
+from .models import Person, Contact, Buyer, Role, \
+    Employee, CompanyType, Revenue, Status, CompanyStatus, \
+    ActionType, Action, BusinessModel, IndustryCategory, \
+    Research, Company, Photo
 
 # Register your models here.
 admin.site.register(Person)
@@ -17,3 +20,4 @@ admin.site.register(BusinessModel)
 admin.site.register(IndustryCategory)
 admin.site.register(Research)
 admin.site.register(Company)
+admin.site.register(Photo)
