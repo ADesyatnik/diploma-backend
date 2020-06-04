@@ -20,7 +20,7 @@ class Person(models.Model):
 
 class Contact(models.Model):
 
-    person = models.ForeignKey(Person, verbose_name=("Личность"), related_name="contacts", on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, verbose_name=("Личность"), related_name="companies_as_contact", on_delete=models.CASCADE)
     description = models.TextField(("Описание"), blank=True, null=True)
 
     class Meta:
@@ -164,7 +164,7 @@ class Company(models.Model):
     district = models.CharField(("Район"), max_length=50, blank=True, null=True) 
     postcode = models.IntegerField(("Индекс"), blank=True, null=True)
     company_type = models.ForeignKey(CompanyType, verbose_name=("Тип компании"), related_name="companies", on_delete=models.SET_NULL, blank=True, null=True)
-    parent = models.ForeignKey('self', verbose_name=("Родительская компания"), related_name="companies", on_delete=models.SET_NULL, blank=True, null=True)
+    parent = models.ForeignKey('self', verbose_name=("Родительская компания"), related_name="parent_companies", on_delete=models.SET_NULL, blank=True, null=True)
     employees_number = models.IntegerField(("Количество сотрудников"), blank=True, null=True)
     description = models.TextField(("Описание"), blank=True, null=True)
     revenue = models.OneToOneField(Revenue, verbose_name=("Доход"), related_name="companies", on_delete=models.PROTECT, blank=True, null=True)
