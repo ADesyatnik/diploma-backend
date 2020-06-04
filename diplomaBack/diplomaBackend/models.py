@@ -81,9 +81,9 @@ class CompanyType(models.Model):
 
 class Revenue(models.Model):
 
-    current = models.DecimalField(("Текущий"), max_digits=10, decimal_places=2)
-    min_value = models.DecimalField(("Минимальный"), max_digits=10, decimal_places=2, blank=True, null=True)
-    max_value = models.DecimalField(("Максимальный"), max_digits=10, decimal_places=2, blank=True, null=True)
+    current = models.DecimalField(("Текущий"), max_digits=20, decimal_places=2)
+    min_value = models.DecimalField(("Минимальный"), max_digits=20, decimal_places=2, blank=True, null=True)
+    max_value = models.DecimalField(("Максимальный"), max_digits=20, decimal_places=2, blank=True, null=True)
 
     class Meta:
         verbose_name = ("Доход")

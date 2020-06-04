@@ -38,9 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'diplomaBackend.apps.DiplomabackendConfig',
+    'django_extensions',
+    'graphene_django',
+    'debug_toolbar',
 ]
 
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
+
+GRAPHENE = {
+    'SCHEMA': 'gql.schema.schema'
+}
+
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
