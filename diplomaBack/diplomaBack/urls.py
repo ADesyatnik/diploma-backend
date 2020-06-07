@@ -7,7 +7,6 @@ import debug_toolbar
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('diplomaBackend.urls')),
-    path('gql', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('gql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('', include(debug_toolbar.urls)),
 ]

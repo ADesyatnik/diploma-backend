@@ -1,12 +1,14 @@
 import graphene
-from .types import CompanyType, BusinessModelType
+from .types import CompanyNode
 from .resolvers import resolve_all_companies
-from diplomaBackend.models import Company, BusinessModel
+from diplomaBackend.models import Company
+from .mutations import CompanyMutation
+from graphene_django.filter import DjangoFilterConnectionField
 
 
 class Query(graphene.ObjectType):
-    all_companies = graphene.List(CompanyType)
-    company = graphene.Field(CompanyType, id=graphene.Int())
+    all_companies = DjangoFilterConnectionField(CompanyNode)
+    company = graphene.Field(CompanyNode, id=graphene.Int())
 
     def resolve_all_companies(self, info, **kwargs):
         return Company.objects.all()
@@ -17,4 +19,7 @@ class Query(graphene.ObjectType):
         if id is not None:
             return Company.objects.get(pk=id)
 
-schema = graphene.Schema(query=Query)
+class Mutation(graphene.ObjectType):
+    create_company = CompanyMutation.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
