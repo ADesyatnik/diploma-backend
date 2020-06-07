@@ -11,10 +11,9 @@ from diplomaBackend.models import (Company, BusinessModel, Revenue, Buyer,
 class CompanyNode(DjangoObjectType):
     class Meta:
         model = Company
-        filter_fields = {
-            'legal_name': ['exact', 'icontains', 'istartswith'],
-        }
+        filter_fields = '__all__'
         interfaces = (relay.Node, )
+
 
 class BusinessModelNode(DjangoObjectType):
     class Meta:
