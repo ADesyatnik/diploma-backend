@@ -81,9 +81,9 @@ class CompanyType(models.Model):
 
 class Revenue(models.Model):
 
-    current = models.DecimalField(("Текущий"), max_digits=10, decimal_places=2)
-    min_value = models.DecimalField(("Минимальный"), max_digits=10, decimal_places=2, blank=True, null=True)
-    max_value = models.DecimalField(("Максимальный"), max_digits=10, decimal_places=2, blank=True, null=True)
+    current = models.DecimalField(("Текущий"), max_digits=20, decimal_places=2)
+    min_value = models.DecimalField(("Минимальный"), max_digits=20, decimal_places=2, blank=True, null=True)
+    max_value = models.DecimalField(("Максимальный"), max_digits=20, decimal_places=2, blank=True, null=True)
 
     class Meta:
         verbose_name = ("Доход")
@@ -168,7 +168,7 @@ class Company(models.Model):
     employees_number = models.IntegerField(("Количество сотрудников"), blank=True, null=True)
     description = models.TextField(("Описание"), blank=True, null=True)
     revenue = models.OneToOneField(Revenue, verbose_name=("Доход"), related_name="companies", on_delete=models.PROTECT, blank=True, null=True)
-    stock_value = models.DecimalField(("Стоимость акций"), max_digits=10, decimal_places=2)
+    stock_value = models.DecimalField(("Стоимость акций"), max_digits=20, decimal_places=2)
     owner = models.ForeignKey(Contact, verbose_name=("Владелец"), related_name="owned_companies", on_delete=models.PROTECT, blank=True, null=True)
     company_status = models.ForeignKey(CompanyStatus, verbose_name=("Статус сделки"), related_name="companies", on_delete=models.PROTECT, blank=True, null=True)
     logo = models.CharField(("Логотип"), max_length=200)
