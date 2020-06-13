@@ -32,11 +32,49 @@ from ..models import (
     IndustryCategory, Research,
     Photo, Action
 )
+from django_filters import rest_framework as filters
+
+class RoleFilter(filters.FilterSet):
+    class Meta:
+        model = Role
+        fields = ('name', 'slug')
+
+class CompanyFilter(filters.FilterSet):
+    class Meta:
+        model = Company
+        fields = {
+            'legal_name': ['icontains'],
+            'abbr_name': ['icontains'],
+            'phone': ['icontains'],
+            # 'contacts': ,
+            'address': ['icontains'],
+            'city': ['icontains'],
+            'district': ['icontains'],
+            'postcode': ['lte', 'gte', 'exact'],
+            # 'company_type': ,
+            # 'parent': ,
+            'employees_number': ['lte', 'gte', 'exact'],
+            'description': ['icontains'],
+            # 'revenue': ,
+            'stock_value': ['lte', 'gte',],
+            # 'owner': ,
+            # 'company_status': ,
+            # 'logo': ['icontains'],
+            'web': ['icontains'],
+            # 'business_models': ,
+            # 'industry_categories': ,
+            # 'buyers': ,
+            # 'active_buyer': ,
+            'foundation_date':  ['lte', 'gte', 'exact']
+        }
 
 # Company
 class CompanyListView(ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanyReadSerializer
+    filterset_class = CompanyFilter
+    paginate_by = 1
+
 
 
 class CompanyDetailView(RetrieveAPIView):
@@ -149,6 +187,7 @@ class BuyerUpdateView(RetrieveUpdateAPIView):
 class RoleListView(ListAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleReadSerializer
+    filterset_class = RoleFilter
 
 
 class RoleDetailView(RetrieveAPIView):
