@@ -4,3 +4,5 @@ db.sqlite3
 .vscode/
 
 venv/
+
+local_settings.py

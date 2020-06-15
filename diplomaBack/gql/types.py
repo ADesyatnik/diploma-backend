@@ -11,7 +11,33 @@ from diplomaBackend.models import (Company, BusinessModel, Revenue, Buyer,
 class CompanyNode(DjangoObjectType):
     class Meta:
         model = Company
-        filter_fields = '__all__'
+        filter_fields = {
+            'legal_name': ['icontains'],
+            'abbr_name': ['icontains'],
+            'phone': ['icontains'],
+            # 'contacts': ,
+            'address': ['icontains'],
+            'city': ['icontains'],
+            'district': ['icontains'],
+            'postcode': ['lte', 'gte', 'exact'],
+            # 'company_type': ,
+            # 'parent': ,
+            'employees_number': ['lte', 'gte', 'exact'],
+            'description': ['icontains'],
+            'revenue__current': ['lte', 'gte', 'exact'],
+            'revenue__max_value': ['lte', 'gte', 'exact'],
+            'revenue__min_value': ['lte', 'gte', 'exact'],
+            'stock_value': ['lte', 'gte', ],
+            # 'owner': ,
+            # 'company_status': ,
+            # 'logo': ['icontains'],
+            'web': ['icontains'],
+            # 'business_models': ,
+            # 'industry_categories': ,
+            # 'buyers': ,
+            # 'active_buyer': ,
+            'foundation_date': ['lte', 'gte', 'exact']
+        }
         interfaces = (relay.Node, )
 
 

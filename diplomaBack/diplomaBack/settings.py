@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'corsheaders',
     'graphql_auth',
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig'
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+    'graphiql_debug_toolbar',
 ]
 
 GRAPH_MODELS = {
@@ -76,8 +77,10 @@ GRAPHQL_JWT = {
     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
 }
 
+
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'graphiql_debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,6 +90,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware'
+]
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -116,18 +125,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'diplomaBack.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -168,3 +165,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
