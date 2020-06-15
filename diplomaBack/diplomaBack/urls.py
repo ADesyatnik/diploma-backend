@@ -7,6 +7,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('gql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('', include('diplomaBackend.urls')),
 ]
 
 
