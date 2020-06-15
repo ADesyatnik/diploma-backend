@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'graphql_auth',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'graphiql_debug_toolbar',
+    'rest_framework',
+    'django_filters',
 ]
 
 GRAPH_MODELS = {
@@ -125,6 +127,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'diplomaBack.wsgi.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
