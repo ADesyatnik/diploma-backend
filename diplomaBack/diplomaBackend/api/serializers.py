@@ -13,7 +13,7 @@ class CompanyReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
-        depth = 1
+        depth = 2
 
 class CompanyWriteSerializer(serializers.ModelSerializer):
     class Meta:
