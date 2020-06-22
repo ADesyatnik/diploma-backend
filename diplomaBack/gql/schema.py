@@ -2,22 +2,24 @@ import graphene
 from .types import (CompanyNode, BusinessModelNode,
                     IndustryCategoryNode, PersonNode, ContactNode,
                     StatusNode)
-from .resolvers import resolve_all_companies
 from diplomaBackend.models import (
     Company, BusinessModel, IndustryCategory, Person, Contact,
     Status)
 from .mutations import CompanyMutation
-from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.debug import DjangoDebug
 from graphql_auth import mutations
 from graphql_auth.schema import UserQuery, MeQuery
 from graphql import GraphQLError
 from django.db.models import Count
 
+from graphene_django.filter import DjangoFilterConnectionField
+
 
 class Query(UserQuery, MeQuery, graphene.ObjectType):
     all_companies = DjangoFilterConnectionField(CompanyNode)
     company = graphene.Field(CompanyNode, id=graphene.Int())
+
+    
     business_models = graphene.List(BusinessModelNode)
     industry_categories = graphene.List(IndustryCategoryNode)
     owners = graphene.List(ContactNode)
