@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'graphiql_debug_toolbar',
     'rest_framework',
     'django_filters',
+    'rest_framework_swagger',
 ]
 
 GRAPH_MODELS = {
@@ -133,6 +134,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 # Password validation
