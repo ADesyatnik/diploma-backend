@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework_jwt.views import obtain_jwt_token
 
 schema_view = get_swagger_view(title='Harmony-CRM API')
 
 urlpatterns = [
     url(r'api/docs/', schema_view),
+    url(r'^api-token-auth/', obtain_jwt_token),
     path('admin/', admin.site.urls),
     path('', include('diplomaBackend.urls')),
 ]
